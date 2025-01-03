@@ -5,13 +5,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+}
 
-} from "react-native";
+from "react-native";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-;
+
 
 type RootParamList = {
   Login: undefined;
@@ -24,6 +25,7 @@ export default function SignupScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar style="light" />
       <Image
         style={styles.backgroundImage}
@@ -47,8 +49,8 @@ export default function SignupScreen() {
         {/* Title */}
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Sign Up</Text>
-          <Text style={styles.titleText1}>Create your own user account for get</Text>
-          <Text style={styles.titleText1}>Health Service !</Text>
+          <Text style={styles.titleText1}>Create user account to get</Text>
+          <Text style={styles.titleText1}>Health Service!</Text>
         </View>
 
         {/* Form */}
@@ -82,8 +84,10 @@ export default function SignupScreen() {
               <Text style={styles.signUpLink}>LogIn</Text>
             </TouchableOpacity>
           </View>
+
         </View>
       </View>
+    </View>
     </SafeAreaView>
   );
 }
@@ -118,10 +122,12 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingBottom: 10,
     paddingHorizontal: 20,
+    
   },
   titleContainer: {
     alignItems: "stretch",
-    marginBottom: 20,
+    marginBottom: 40,
+    marginTop: 90,
   },
   titleText: {
     color: "white",

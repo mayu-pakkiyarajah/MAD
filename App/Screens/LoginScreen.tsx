@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -5,76 +6,115 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  SafeAreaView,
+  Alert,
 } from "react-native";
-import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type RootParamList = {
   Login: undefined;
   Signup: undefined;
+  Dashboard: undefined;
 };
 
+type Credentials = {
+  email: string;
+  password: string;
+};
+
+const VALID_CREDENTIALS: Credentials[] = [
+  { email: "mayu@gmail.com", password: "mayu@123" },
+  { email: "admin@eduapp.com", password: "admin@123" },
+];
 
 export default function LoginScreen() {
+  const navigation = useNavigation<NavigationProp<RootParamList>>();
 
-  
-const navigation = useNavigation<NavigationProp<RootParamList>>();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const handleSignIn = () => {
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    const isValid = VALID_CREDENTIALS.some(
+      (cred) =>
+        cred.email === trimmedEmail && cred.password === trimmedPassword
+    );
+
+    if (isValid) {
+      navigation.navigate("Dashboard"), { 
+        username: trimmedEmail.split('@')[0] 
+      };
+    } else {
+      setError("Invalid email or password");
+      Alert.alert("Error", "Invalid email or password");
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
-      <Image
-        style={styles.backgroundImage}
-        source={require("../../assets/images/background.png")}
-      />
-
-      {/* Lights */}
-      <View style={styles.overlayContainer}>
+      <View style={styles.container}>
+        <StatusBar style="light" />
         <Image
-          style={styles.lightImage1}
-          source={require("../../assets/images/light.png")}
+          style={styles.backgroundImage}
+          source={require("../../assets/images/background.png")}
         />
-        <Image
-          style={styles.lightImage2}
-          source={require("../../assets/images/light.png")}
-        />
-      </View>
 
-      {/* Title and Forms */}
-      <View style={styles.formContainer}>
-        {/* Title */}
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Welcome !!!</Text>
-          <Text style={styles.titleText1}>We are ready serve you a best</Text>
-          <Text style={styles.titleText1}>Health Service !</Text>
+        <View style={styles.overlayContainer}>
+          <Image
+            style={styles.lightImage1}
+            source={require("../../assets/images/light.png")}
+          />
+          <Image
+            style={styles.lightImage2}
+            source={require("../../assets/images/light.png")}
+          />
         </View>
 
-        {/* Form */}
-        <View style={styles.inputContainer}>
-          <View></View>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="gray"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="gray"
-            secureTextEntry
-          />
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.loginButton}>
-              <Text style={styles.loginButtonText}>LogIn</Text>
-            </TouchableOpacity>
+        <View style={styles.formContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>Welcome !!!</Text>
+            <Text style={styles.titleText1}>We are ready to serve you</Text>
+            <Text style={styles.titleText1}>the best Health Service!</Text>
           </View>
 
-          <View style={styles.signUpContainer}>
-            <Text style={styles.signUpText}>Don't have an Account?</Text>
-            <TouchableOpacity onPress={()=> navigation.navigate('Signup')}>
-              <Text style={styles.signUpLink}>SignUp</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="gray"
+              onChangeText={(text) => {
+                setEmail(text);
+                setError("");
+              }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="gray"
+              onChangeText={(text) => {
+                setPassword(text);
+                setError("");
+              }}
+              secureTextEntry
+            />
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+            <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
+              <Text style={styles.loginButtonText}>Sign In</Text>
             </TouchableOpacity>
+
+            <View style={styles.signUpContainer}>
+              <Text style={styles.signUpText}>Don't have an Account?</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+                <Text style={styles.signUpLink}>SignUp</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -115,7 +155,8 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: "stretch",
-    marginBottom: 20,
+    marginBottom: 50,
+    marginTop: 40,
   },
   titleText: {
     color: "white",
@@ -125,8 +166,7 @@ const styles = StyleSheet.create({
   },
   titleText1: {
     color: "white",
-    // fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 17,
     letterSpacing: 1.5,
   },
   inputContainer: {
@@ -139,8 +179,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 16,
   },
-  buttonContainer: {
-    marginTop: 10,
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    marginBottom: 10,
   },
   loginButton: {
     backgroundColor: "#38BDF8",
