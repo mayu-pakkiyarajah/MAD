@@ -5,13 +5,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import LoginScreen from './Screens/LoginScreen';
 import SignupScreen from './Screens/SignupScreen';
 import DashboardScreen from './Screens/DashboardScreen';
-import { ClickProvider } from './contexts/ClickContext';
-
-export type RootStackParamList = {
-  Login: undefined;
-  Signup: undefined;
-  Dashboard: { username?: string };
-};
+import { RootStackParamList } from './types';
+import { ClickProvider } from './contexts/ClickStore';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -27,7 +22,7 @@ export default function App() {
           >
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />
-            <Stack.Screen name="Dashboard" component={DashboardScreen} />
+            <Stack.Screen name="Dashboard" component={DashboardScreen} /> 
           </Stack.Navigator>
         </NavigationContainer>
       </ClickProvider>

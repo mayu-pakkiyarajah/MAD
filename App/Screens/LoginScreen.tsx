@@ -47,7 +47,7 @@ export default function LoginScreen() {
     if (isValid) {
       navigation.navigate("Dashboard"), { 
         username: trimmedEmail.split('@')[0] 
-      };
+      }
     } else {
       setError("Invalid email or password");
       Alert.alert("Error", "Invalid email or password");
